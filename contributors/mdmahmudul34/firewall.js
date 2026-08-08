@@ -3,9 +3,9 @@
 // flagged normal / malicious in real time.
 
 (function () {
-  const W = 640;
+  let W = 640;
   const H = 360;
-  const WALL_X = W - 80;
+  let WALL_X = W - 80;
 
   let canvas, ctx;
   let packets = [];
@@ -161,14 +161,24 @@
     requestAnimationFrame(loop);
   }
 
+  function resize() {
+    const holder = document.getElementById("firewall-canvas-wrap");
+    if (!holder || !canvas) return;
+    const containerW = holder.clientWidth || 640;
+    W = Math.max(280, Math.min(640, containerW));
+    WALL_X = W - 80;
+    canvas.width = W;
+    canvas.height = H;
+  }
+
   function init() {
     const holder = document.getElementById("firewall-canvas-wrap");
     if (!holder) return;
     canvas = document.createElement("canvas");
-    canvas.width = W;
-    canvas.height = H;
     holder.appendChild(canvas);
     ctx = canvas.getContext("2d");
+    resize();
+    window.addEventListener("resize", resize);
 
     const resetBtn = document.getElementById("firewall-reset");
     const speedBtn = document.getElementById("firewall-speed");

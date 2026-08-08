@@ -5,12 +5,20 @@
 // activation, and the output layer lights up the winning class.
 
 (function () {
-  const W = 640;
+  let W = 640;
   const H = 380;
 
   const LAYER_SIZES = [4, 6, 5, 3];
-  const LAYER_X = [80, 260, 440, 580];
+  let LAYER_X = [80, 260, 440, 580];
   const CLASS_LABELS = ["normal", "suspicious", "malicious"];
+
+  function computeLayerX() {
+    const margin = 50;
+    const usable = W - margin * 2;
+    LAYER_X = LAYER_SIZES.map(
+      (_, l) => margin + (usable * l) / (LAYER_SIZES.length - 1),
+    );
+  }
 
   let canvas, ctx;
   let layers = []; // layers[l] = array of {x, y, activation}
@@ -262,17 +270,36 @@
     requestAnimationFrame(loop);
   }
 
+  function resize() {
+    const holder = document.getElementById("neural-canvas-wrap");
+    if (!holder || !canvas) return;
+    const containerW = holder.clientWidth || 640;
+    W = Math.max(280, Math.min(640, containerW));
+    computeLayerX();
+    canvas.width = W;
+    canvas.height = H;
+    buildNetwork();
+    cycle = 0;
+    startCycle();
+  }
+
   function init() {
     const holder = document.getElementById("neural-canvas-wrap");
     if (!holder) return;
     canvas = document.createElement("canvas");
-    canvas.width = W;
-    canvas.height = H;
     holder.appendChild(canvas);
     ctx = canvas.getContext("2d");
 
+    computeLayerX();
+    const containerW = holder.clientWidth || 640;
+    W = Math.max(280, Math.min(640, containerW));
+    canvas.width = W;
+    canvas.height = H;
+    computeLayerX();
+
     buildNetwork();
     startCycle();
+    window.addEventListener("resize", resize);
 
     const resetBtn = document.getElementById("nn-reset");
     const toggleBtn = document.getElementById("nn-toggle");
