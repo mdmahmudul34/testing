@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalpesh Sharma — hacker directory</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="styles.css">
+<script src="../../assets/theme.js"></script>
+</head>
+<body>
+<nav class="nav">
+<a class="nav-brand" href="../../index.html"><span class="dot"></span> hacker directory</a>
+<div class="nav-links">
+<a href="../../index.html">← back</a>
+<button id="theme-toggle" aria-label="Toggle Theme">🌓</button>
+</div>
+</nav>
+
+<main class="wrap">
+<section class="profile-hero">
+<img class="profile-avatar" src="https://github.com/Kalpesh1Sharma.png?size=200" alt="Kalpesh Sharma">
+<div>
+<h1 class="profile-name">Kalpesh Sharma</h1>
+<p class="profile-meta">AI & Backend Engineer · @Kalpesh1Sharma</p>
+<p class="profile-bio">
+Building AI agents, backend systems and developer tools. Currently exploring
+open source through MLH while learning scalable backend engineering.
+</p>
+
+<div class="pills">
+<span class="pill" data-pill="python">Python</span>
+<span class="pill" data-pill="fastapi">FastAPI</span>
+<span class="pill" data-pill="ai">AI</span>
+<span class="pill" data-pill="backend">Backend</span>
+<span class="pill" data-pill="react">React</span>
+<span class="pill" data-pill="opensource">Open Source</span>
+</div>
+
+<div class="links-row">
+<a class="btn btn-outline" href="https://github.com/Kalpesh1Sharma" target="_blank">GitHub ↗</a>
+<a class="btn btn-outline" href="https://kalpeshsharma.in" target="_blank">Website ↗</a>
+</div>
+</div>
+</section>
+
+<section class="block">
+<h2>Interactive Terminal</h2>
+
+<div class="terminal">
+<pre id="output">Welcome!
+
+Type:
+help
+about
+skills
+projects
+contact
+play</pre>
+<div class="prompt">$ <input id="cmd" autocomplete="off" placeholder="type here..."></div>
+</div>
+
+<div id="board" class="board"></div>
+<p id="status"></p>
+<button id="restart">Restart Game</button>
+</section>
+</main>
+
+<footer class="site-footer">
+This is my page in the hacker directory.
+</footer>
+
+<script src="mcmc.js"></script>
+</body>
+</html>

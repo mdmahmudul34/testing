@@ -1,0 +1,86 @@
+/*
+  Carlos Osorio's personal page styles.
+*/
+
+/* Custom Pill Colors */
+.pill[data-pill="embedded"] { --pill-color: #ff3366; }
+.pill[data-pill="robotics"] { --pill-color: #ff9900; }
+.pill[data-pill="hardware"] { --pill-color: #00ffcc; }
+.pill[data-pill="python"] { --pill-color: #3ef2a1; }
+.pill[data-pill="fullstack"] { --pill-color: #a56dff; }
+
+[data-theme="light"] .pill[data-pill="embedded"] { --pill-color: #d9184b; }
+[data-theme="light"] .pill[data-pill="robotics"] { --pill-color: #cc7a00; }
+[data-theme="light"] .pill[data-pill="hardware"] { --pill-color: #00b38f; }
+
+/* Khymera Telemetry Panel (Easter Egg) */
+.telemetry-panel {
+  background: #0a0a0a;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  font-family: var(--font-mono);
+  color: #00ffcc;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 20px rgba(0, 255, 204, 0.05);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  margin-top: 1.5rem;
+}
+
+.telemetry-panel:active {
+  transform: scale(0.98);
+}
+
+.telemetry-panel::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(rgba(0,255,204,0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0,255,204,0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+}
+
+.sys-log {
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 5px rgba(0,255,204,0.4);
+  line-height: 1.5;
+}
+
+.sys-log span.alert { color: #ff3366; font-weight: bold; text-shadow: 0 0 5px rgba(255,51,102,0.4); }
+.sys-log span.success { color: #3ef2a1; }
+
+.blink { animation: blinker 1s linear infinite; }
+@keyframes blinker { 50% { opacity: 0; } }
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #222;
+  border-radius: 4px;
+  margin-top: 1.2rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #00ffcc;
+  width: 10%;
+  animation: loadSync 4s ease-in-out infinite alternate;
+  box-shadow: 0 0 10px #00ffcc;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+@keyframes loadSync {
+  0% { width: 10%; }
+  100% { width: 95%; }
+}
+
+/* Fix panel visibility on light theme so it stays dark and hacker-like */
+[data-theme="light"] .telemetry-panel {
+  background: #111;
+  border-color: #333;
+}

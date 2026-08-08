@@ -1,0 +1,20 @@
+{
+  "_comment": "Lowercase words/phrases that get flagged for human review if found in a card.json's name/role/bio/university/tags. This is a blunt wordlist, not a moderation model — it will have false positives and misses. That's intentional: it exists to route obvious cases to a maintainer, not to auto-reject anything on its own.",
+  "words": [
+    "fuck",
+    "shit",
+    "bitch",
+    "asshole",
+    "bastard",
+    "cunt",
+    "nigger",
+    "nigga",
+    "faggot",
+    "retard",
+    "whore",
+    "slut",
+    "rape",
+    "nazi",
+    "hitler"
+  ]
+}

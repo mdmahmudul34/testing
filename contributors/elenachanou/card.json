@@ -1,0 +1,11 @@
+{
+  "name": "Elena",
+  "role": "CS Student & Full Stack Developer",
+  "university": "Hellenic Open University",
+  "github": "ElenaChanou",
+  "bio": "Computer Science student building web applications and exploring AI, 3D technologies, and creative tools. Interested in combining technology with design, and real-world problem solving.",
+  "tags": ["JavaScript", "React", "Golang"],
+  "links": {
+    "website": "https://github.com/ElenaChanou"
+  }
+}

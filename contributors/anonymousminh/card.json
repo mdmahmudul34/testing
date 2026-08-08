@@ -1,0 +1,12 @@
+{
+  "name": "Minh Le",
+  "role": "Data Science student",
+  "university": "University of Utah",
+  "github": "anonymousminh",
+  "bio": "Passionate about AI/ML, doing research, and building cool things",
+  "tags": ["Python", "C++", "Machine Learning", "Applied AI"],
+  "links": {
+    "website": "https://minhanhle.vercel.app",
+    "linkedin": "https://www.linkedin.com/in/minhle7802/"
+  }
+}

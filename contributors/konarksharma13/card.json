@@ -1,0 +1,11 @@
+{
+  "name": "Konark Sharma",
+  "role": "Technical Writer",
+  "university": "Sharda university",
+  "github": "konarksharma13",
+  "bio": "I'm a frontend developer who loves turning curious ideas into products and sharing the journey behind them. I write about React, AI, product thinking, and everything I learn while building.",
+  "tags": ["Python", "JavaScript", "C++", "TypeScript"],
+  "links": {
+    "website": "https://dev.to/konark_13"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Tanmay Rajpal",
+  "role": "Software Engineer | CS Student",
+  "university": "IIITDMJ",
+  "github": "SinCosMay",
+  "bio": "trying to get better 1% everyday",
+  "tags": ["Python", "FastAPI", "Backend" , "Docker" , "PostgreSQL"],
+  "links": {
+    "website": "https://signal-archive-teal.vercel.app/"
+  }
+}

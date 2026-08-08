@@ -1,0 +1,11 @@
+{
+  "name": "Laurine Ndanu Nzuki",
+  "role": "Full-stack dev",
+  "university": "Softmarket Ke.",
+  "github": "Ndanu-Nzuki",
+  "bio": "One or two sentences about what you build, what you're learning, or what you're into.",
+  "tags": ["Python", "JavaScript", "A.I./M.L."],
+  "links": {
+    "website": "https://bg-portfolio-phi.vercel.app/"
+  }
+}

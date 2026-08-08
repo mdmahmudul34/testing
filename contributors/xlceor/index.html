@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carlos Osorio — hacker directory</title>
+  <meta name="description" content="Carlos Osorio's personal page in the hacker directory." />
+  <link rel="stylesheet" href="../../assets/style.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="../../assets/theme.js"></script>
+  <!-- Import p5.js from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <script src="khymera.js"></script>
+</head>
+
+<body>
+  <nav class="nav">
+    <a class="nav-brand" href="../../index.html">
+      <span class="dot"></span>
+      hacker directory
+    </a>
+    <div class="nav-links">
+      <a href="../../index.html">← back to directory</a>
+      <button id="theme-toggle" aria-label="Toggle theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main class="wrap" style="padding-top: 3rem; padding-bottom: 4rem;">
+    <h1 style="font-family: var(--font-goofy); font-size: 2.3rem; margin-bottom: 0.4rem;">Carlos Osorio</h1>
+    <p style="color: var(--text-secondary); margin-top: 0;">Hardware-Software Alchemist · @xlceor</p>
+    
+    <p style="max-width: 620px; line-height: 1.6; color: var(--text-secondary);">
+      I don't just write code; I bend physical reality to my will using C++, Python, and sheer willpower. 
+      I build systems that bridge the digital void and the physical world. Whether it's a 
+      <strong style="color: var(--text-primary)">prosthetic-inspired robotic gripper (Khymera)</strong> powered by an ESP32, 
+      or a Python app that reconciles 1,000 invoices in under two seconds to save my dad from losing his mind (and money).
+    </p>
+    <p style="max-width: 620px; line-height: 1.6; color: var(--text-secondary);">
+      I started out wanting to build Iron Man's suit. Now I build full-stack web dashboards that talk directly to 
+      hardware via SSE. Close enough.
+    </p>
+
+    <div class="pills" style="margin: 1.2rem 0;">
+      <span class="pill" data-pill="embedded">Embedded Systems</span>
+      <span class="pill" data-pill="robotics">Robotics</span>
+      <span class="pill" data-pill="hardware">Hardware-Software</span>
+      <span class="pill" data-pill="python">Python Automation</span>
+      <span class="pill" data-pill="fullstack">Full-Stack</span>
+    </div>
+
+    <div style="display:flex; gap:0.7rem; flex-wrap: wrap;">
+      <a class="btn btn-outline" href="https://github.com/xlceor" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn btn-outline" href="https://xlceor.github.io/" target="_blank" rel="noopener">Portfolio ↗</a> <!-- Reemplaza con el link real si es diferente -->
+    </div>
+
+    <section style="margin-top: 3rem;">
+      <h2 style="font-family: var(--font-goofy); font-size: 1.45rem;">Khymera Hardware Uplink <span class="blink" style="color: #00ffcc;">_</span></h2>
+      <p style="color: var(--text-secondary); max-width: 620px; line-height: 1.6;">
+        Live simulation of my hardware telemetry. Tap the terminal below a few times to see what happens when you mess with the system overrides.
+      </p>
+
+      <!-- The Easter Egg Panel -->
+      <section style="margin-top: 3rem;">
+        <h2 style="font-family: var(--font-goofy); font-size: 1.45rem;">
+          <span class="dot" style="background: #00ffcc; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px;"></span>
+          Live Khymera Telemetry
+        </h2>
+        <p style="color: var(--text-secondary); max-width: 620px; line-height: 1.6;">
+          A live p5.js visualization of the inverse kinematics running on the Khymera robotic gripper. 
+          Click the button to inject the <strong>Jevil IoT Stress-Test</strong> and watch the ESP32 overheat in real-time.
+        </p>
+  
+        <!-- Panel Wrapper -->
+        <div class="viz-panel" style="margin-top: 1.5rem;">
+          <div id="khymera-canvas-wrap" style="display: flex; justify-content: center; border-radius: 8px; overflow: hidden; border: 1px solid var(--border);"></div>
+          
+          <!-- Controls & Stats -->
+          <div class="viz-controls">
+            <button id="khymera-mode-btn" style="font-family: var(--font-mono); font-weight: bold;">MODE: NOMINAL</button>
+            <span style="margin-left: auto;">Packets Sent: <span id="khymera-packets" class="stat-chip">0</span></span>
+            <span>Servo Temp: <span id="khymera-temp" class="stat-chip" style="color: #ff9900;">32.0 °C</span></span>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    This is my page in the <a href="../../index.html">hacker directory</a> — make your own in a PR.
+  </footer>
+
+  <script>
+    HDTheme.init();
+
+    // Easter Egg Logic
+    let clickCount = 0;
+    function triggerOverride() {
+      clickCount++;
+      const log = document.getElementById('hack-log');
+      const bar = document.getElementById('sync-bar');
+      
+      if(clickCount === 1) {
+        log.innerHTML = "> <span class='alert'>WARNING: Unauthorized manual override detected.</span>";
+      } else if (clickCount === 3) {
+        log.innerHTML = "> <span class='alert'>OVERRIDE ESCALATED. BYPASSING SAFETY PROTOCOLS...</span>";
+      } else if (clickCount === 5) {
+        log.innerHTML = "> <span class='alert'>INITIATING KHYMERA GRIPPER MAXIMUM TORQUE.</span> <br>> Deploying Jevil IoT stress-test...";
+      } else if (clickCount === 7) {
+        log.innerHTML = "> <span style='color:#ff3366; font-weight:bold; text-shadow: 0 0 8px #ff3366;'>CRITICAL SUCCESS: Iron Man Mk. I suit online. (Just kidding, it's just an ESP32 catching fire).</span>";
+        bar.style.background = "#ff3366";
+        bar.style.boxShadow = "0 0 15px #ff3366";
+        bar.style.animation = "none";
+        bar.style.width = "100%";
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "Halleluya Mulugeta",
+  "role": "Fullstack dev",
+  "university": "AAU",
+  "github": "halleygz",
+  "bio": "Exploring new ways to have fun when writing code.",
+  "tags": [
+    "Python",
+    "TypeScript",
+    "Go"
+  ],
+  "links": {
+    "website": "https://halleygz.vercel.app/"
+  }
+}

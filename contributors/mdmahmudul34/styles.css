@@ -1,0 +1,33 @@
+/*
+  Mahmudul's personal page styles.
+  This file only affects contributors/mdmahmudul34/index.html — nothing site-wide.
+*/
+
+.pill[data-pill="python"] { --pill-color: #3ef2a1; }
+.pill[data-pill="ai"] { --pill-color: #4d8bff; }
+.pill[data-pill="cybersecurity"] { --pill-color: #ff5c5c; }
+.pill[data-pill="opensource"] { --pill-color: #33d9c1; }
+.pill[data-pill="docker"] { --pill-color: #2496ed; }
+.pill[data-pill="linux"] { --pill-color: #ffd23f; }
+
+[data-theme="light"] .pill[data-pill="python"] { --pill-color: #2fb894; }
+
+cat > contributors/mdmahmudul34/styles.css << 'EOF'
+/*
+  Mahmudul's personal page styles.
+  This file only affects contributors/mdmahmudul34/index.html — nothing site-wide.
+*/
+
+.pill[data-pill="python"] { --pill-color: #3ef2a1; }
+.pill[data-pill="ai"] { --pill-color: #4d8bff; }
+.pill[data-pill="cybersecurity"] { --pill-color: #ff5c5c; }
+.pill[data-pill="opensource"] { --pill-color: #33d9c1; }
+.pill[data-pill="docker"] { --pill-color: #2496ed; }
+.pill[data-pill="linux"] { --pill-color: #ffd23f; }
+
+[data-theme="light"] .pill[data-pill="python"] { --pill-color: #2fb894; }
+[data-theme="light"] .pill[data-pill="ai"] { --pill-color: #3fa9e0; }
+[data-theme="light"] .pill[data-pill="cybersecurity"] { --pill-color: #d94f4f; }
+[data-theme="light"] .pill[data-pill="opensource"] { --pill-color: #2fa88f; }
+[data-theme="light"] .pill[data-pill="docker"] { --pill-color: #1d78c9; }
+[data-theme="light"] .pill[data-pill="linux"] { --pill-color: #e0a83f; }

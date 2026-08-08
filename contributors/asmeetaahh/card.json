@@ -1,0 +1,11 @@
+{
+  "name": "Asmita Majumdar",
+  "role": "Frontend developer",
+  "university": "Bangalore Institute of Technology",
+  "github": "asmeetaahh",
+  "bio": "I have built an amazon like website.I love web development",
+  "tags": ["Python", "JavaScript", "C++"],
+  "links": {
+    "website": "https://github.com/asmeetaahh"
+  }
+}

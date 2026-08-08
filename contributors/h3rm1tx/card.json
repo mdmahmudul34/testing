@@ -1,0 +1,20 @@
+{
+  "name": "H3RM1T",
+  "role": "Cybersecurity & Systems Engineer",
+  "university": "Independent Researcher",
+  "github": "h3rm1tx",
+  "bio": "Cybersecurity enthusiast and systems engineer focused on Linux, Rust, operating systems, and open-source software. Currently competing in CTFs and contributing to projects including rust-lang/rust, Zed, and rust-clippy.",
+  "tags": [
+    "Rust",
+    "Linux",
+    "Cybersecurity",
+    "Python",
+    "JavaScript",
+    "Systems Programming",
+    "CTF",
+    "Open Source"
+  ],
+  "links": {
+    "github": "https://github.com/h3rm1tx"
+  }
+}

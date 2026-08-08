@@ -1,0 +1,11 @@
+{
+  "name": "Muhammad Sameer",
+  "role": "DevOps Student, Singer",
+  "university": "University of Southern Punjab",
+  "github": "thatsameerkashif",
+  "bio": "I write and produce songs, am currently learning Cloud DevOps tools",
+  "tags": ["Python", "Docker", "AWS"],
+  "links": {
+    "website": "https://your-site.example.com"
+  }
+}

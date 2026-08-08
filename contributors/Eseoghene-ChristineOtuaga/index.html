@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ese — hacker directory</title>
+  <meta name="description" content="Your personal page in the hacker directory." />
+  <!--
+    Hey! This is YOUR page. The stylesheet below gives you the site's
+    dark/light theme + fonts for free, but you don't have to use any of it —
+    delete the whole <body> and build something completely different if
+    you want. Games, art, a terminal, a blog, whatever. Go wild.
+  -->
+  <link rel="stylesheet" href="../../assets/style.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="../../assets/theme.js"></script>
+</head>
+<body>
+  <nav class="nav">
+    <a class="nav-brand" href="../../index.html">
+      <span class="dot"></span>
+      hacker directory
+    </a>
+    <div class="nav-links">
+      <a href="../../index.html">← back to directory</a>
+      <button id="theme-toggle" aria-label="Toggle theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main class="wrap" style="padding-top: 3rem; padding-bottom: 4rem;">
+    <h1 style="font-family: var(--font-goofy); font-size: 2.3rem; margin-bottom: 0.4rem;">Eseoghene Christine Otuaga</h1>
+    <p style="color: var(--text-secondary); margin-top: 0;">Junior Dev 😁 · recently graduated from University  · @Eseoghene-ChristineOtuaga</p>
+
+    <p style="max-width: 620px; line-height: 1.6; color: var(--text-secondary);">
+      I'm a frontend dev, currently taking Angela's python bootcamp to improve my skills, I love Jesus, Anime and Marshmallows
+    </p>
+
+    <div class="pills" style="margin: 1.2rem 0;">
+      <span class="pill" style="--pill-color:#3ef2a1">Tag One</span>
+      <span class="pill" style="--pill-color:#4d8bff">Tag Two</span>
+      <span class="pill" style="--pill-color:#ff5cb3">Tag Three</span>
+    </div>
+
+    <div style="display:flex; gap:0.7rem; flex-wrap: wrap;">
+      <a class="btn btn-outline" href="https://github.com/Eseoghene-ChristineOtuaga" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn btn-outline" href="https://cv-azure-five.vercel.app/" target="_blank" rel="noopener">Website ↗</a>
+    </div>
+
+    <section style="margin-top: 3rem;">
+      <h2 style="font-family: var(--font-goofy); font-size: 1.45rem;">Anime guess game</h2>
+      <p style="color: var(--text-secondary); max-width: 620px; line-height: 1.6;">
+        Get a hint, then guess the anime character before the round ends.
+      </p>
+
+      <div class="anime-card">
+        <div class="anime-header">
+          <div>
+            <div class="anime-label">Score</div>
+            <strong id="anime-score">0</strong>
+          </div>
+          <div>
+            <div class="anime-label">Round</div>
+            <strong id="anime-round">0/5</strong>
+          </div>
+        </div>
+
+        <div class="anime-clue" aria-live="polite">
+          <div class="anime-label">Hint</div>
+          <p id="anime-hint">Press start to begin your anime challenge.</p>
+        </div>
+
+        <div class="anime-controls">
+          <input id="anime-answer" type="text" placeholder="Who is it?" />
+          <button id="anime-hint-btn" class="btn btn-outline" type="button">Get hint</button>
+          <button id="anime-submit" class="btn" type="button">Submit</button>
+        </div>
+
+        <p id="anime-message" class="anime-message">Start the game and test your anime knowledge.</p>
+        <button id="anime-next" class="btn btn-outline" type="button">Start game</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    This is my page in the <a href="../../index.html">hacker directory</a> — make your own in a PR.
+  </footer>
+
+  <script>
+    HDTheme.init();
+
+    const startButton = document.getElementById('anime-next');
+    const hintButton = document.getElementById('anime-hint-btn');
+    const submitButton = document.getElementById('anime-submit');
+    const scoreEl = document.getElementById('anime-score');
+    const roundEl = document.getElementById('anime-round');
+    const hintEl = document.getElementById('anime-hint');
+    const answerInput = document.getElementById('anime-answer');
+    const messageEl = document.getElementById('anime-message');
+
+    const characters = [
+      {
+        name: 'Naruto Uzumaki',
+        aliases: ['naruto', 'naruto uzumaki'],
+        hints: [
+          'He is a ninja from the Hidden Leaf village.',
+          'He is known for carrying the Nine-Tails inside him.',
+          'He dreams of becoming the Hokage.'
+        ]
+      },
+      {
+        name: 'Monkey D. Luffy',
+        aliases: ['luffy', 'monkey d luffy', 'monkey d. luffy'],
+        hints: [
+          'He wants to become the King of the Pirates.',
+          'He ate a Devil Fruit called the Gum-Gum Fruit.',
+          'He wears a straw hat.'
+        ]
+      },
+      {
+        name: 'Sailor Moon',
+        aliases: ['sailor moon', 'usagi tsukino'],
+        hints: [
+          'She is a magical girl with a moon-based transformation.',
+          'She leads the Sailor Guardians.',
+          'Her civilian name is Usagi Tsukino.'
+        ]
+      },
+      {
+        name: 'Goku',
+        aliases: ['goku', 'kakarot'],
+        hints: [
+          'He is a Saiyan warrior.',
+          'He can transform into Super Saiyan forms.',
+          'He trains with Kame-Sen’nin.'
+        ]
+      },
+      {
+        name: 'Saitama',
+        aliases: ['saitama', 'one punch man'],
+        hints: [
+          'He is known for defeating enemies with one punch.',
+          'He is a hero for fun.',
+          'He is the protagonist of One-Punch Man.'
+        ]
+      }
+    ];
+
+    let score = 0;
+    let round = 0;
+    let totalRounds = 5;
+    let currentCharacter = null;
+    let hintsShown = 0;
+
+    function updateHud() {
+      scoreEl.textContent = score;
+      roundEl.textContent = `${round}/${totalRounds}`;
+    }
+
+    function isCorrectAnswer(value, character) {
+      const normalized = value.trim().toLowerCase();
+      return character.aliases.some((alias) => normalized.includes(alias.toLowerCase()));
+    }
+
+    function nextQuestion() {
+      if (round >= totalRounds) {
+        messageEl.textContent = `Game over! You scored ${score} out of ${totalRounds}.`;
+        startButton.textContent = 'Play again';
+        hintEl.textContent = 'Press start to try again.';
+        return;
+      }
+
+      currentCharacter = characters[Math.floor(Math.random() * characters.length)];
+      hintsShown = 0;
+      hintEl.textContent = currentCharacter.hints[0];
+      answerInput.value = '';
+      answerInput.focus();
+      messageEl.textContent = 'A new clue is ready. Use the hint button if you need help.';
+      startButton.textContent = 'Skip to next';
+      updateHud();
+    }
+
+    function showHint() {
+      if (!currentCharacter) {
+        messageEl.textContent = 'Start the game first.';
+        return;
+      }
+
+      if (hintsShown < currentCharacter.hints.length) {
+        hintEl.textContent = currentCharacter.hints[hintsShown];
+        hintsShown += 1;
+        messageEl.textContent = 'Hint revealed.';
+      } else {
+        messageEl.textContent = 'No more hints left. Make your best guess!';
+      }
+    }
+
+    function submitAnswer() {
+      if (!currentCharacter) {
+        messageEl.textContent = 'Start the game first.';
+        return;
+      }
+
+      if (isCorrectAnswer(answerInput.value, currentCharacter)) {
+        score += 1;
+        messageEl.textContent = `Correct! It was ${currentCharacter.name}.`;
+      } else {
+        messageEl.textContent = `Not quite — the answer was ${currentCharacter.name}.`;
+      }
+
+      round += 1;
+      updateHud();
+      startButton.textContent = 'Next character';
+      currentCharacter = null;
+      hintEl.textContent = 'Ready for the next clue.';
+    }
+
+    startButton.addEventListener('click', () => {
+      if (round >= totalRounds) {
+        score = 0;
+        round = 0;
+        updateHud();
+      }
+      nextQuestion();
+    });
+
+    hintButton.addEventListener('click', showHint);
+    submitButton.addEventListener('click', submitAnswer);
+    answerInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        submitAnswer();
+      }
+    });
+
+    updateHud();
+  </script>
+</body>
+</html>

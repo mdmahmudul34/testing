@@ -1,0 +1,11 @@
+{
+  "name": "Mobeen Ahmed",
+  "role": "Student, OS Dev, Full Stack Engineering",
+  "university": "NUML",
+  "github": "Mobeen0119",
+  "bio": "Software Engineering Student",
+  "tags": ["C", "React", "Node", "C++", "JS"],
+  "links": {
+    "website": "https://portfolio-mobeen.netlify.app/home"
+  }
+}

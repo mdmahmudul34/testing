@@ -1,0 +1,11 @@
+{
+  "name": "Kalpesh Sharma",
+  "role": "Backend & AI Engineer",
+  "university": "NIT Jalandhar",
+  "github": "kalpesh1sharma",
+  "bio": "Building AI agents, backend systems, and learning through open source.",
+  "tags": ["Python", "FastAPI", "AI", "Backend", "Open Source"],
+  "links": {
+    "website": "https://kalpeshsharma.in"
+  }
+}

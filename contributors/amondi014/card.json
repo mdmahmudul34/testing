@@ -1,0 +1,11 @@
+{
+  "name": "Edith Amondi",
+  "role": "Software Engineering Student",
+  "university": "African Leadership College of Higher Education",
+  "github": "amondi014",
+  "bio": "I like coding.",
+  "tags": ["Python", "JavaScript", "Rust"],
+  "links": {
+    "website": "https://edith.com"
+  }
+}
