@@ -69,19 +69,18 @@
             @mdmahmudul34
           </p>
           <p class="profile-bio">
-            Computer Science student currently finishing a thesis on machine
-            learning&#8211;based intrusion detection for industrial control
-            systems. Interested in AI/ML, cybersecurity, and open source
-            development &#8212; I enjoy building research-driven solutions,
-            participating in hackathons, and exploring emerging technologies.
+            I enjoy turning curiosity into things that work — through research,
+            experiments, hackathons, and hands-on projects. I explore AI,
+            cybersecurity, and emerging technologies, always learning,
+            tinkering, and occasionally breaking things along the way.
           </p>
           <div class="pills" style="margin-top: 0.8rem">
             <span class="pill" data-pill="python">Python</span>
             <span class="pill" data-pill="ml">Machine Learning</span>
             <span class="pill" data-pill="cybersecurity">Cybersecurity</span>
-            <span class="pill" data-pill="ics">ICS Security</span>
-            <span class="pill" data-pill="docker">Docker</span>
-            <span class="pill" data-pill="opensource">Open Source</span>
+            <span class="pill" data-pill="ids">IDS</span>
+            <span class="pill" data-pill="linux">Linux</span>
+            <span class="pill" data-pill="cryptocurrency">Cryptocurrency</span>
           </div>
           <div class="links-row">
             <a
@@ -93,7 +92,7 @@
             >
             <a
               class="btn btn-outline"
-              href="https://linkedin.com/in/mdmahmud34"
+              href="https://www.linkedin.com/in/mdmahmudul34"
               target="_blank"
               rel="noopener"
               >LinkedIn ↗</a
@@ -151,27 +150,27 @@
       </section>
 
       <section class="block">
-        <h2>Adversarial perturbation, live</h2>
+        <h2>Neural network forward-pass, live</h2>
         <div class="viz-panel">
           <p class="caption">
-            A small classifier looks at a synthetic image made of a few simple
-            shapes and reports its confidence for each class. Slowly nudging
-            pixels in the direction that most increases the "wrong" class score
-            &#8212; an adversarial perturbation &#8212; can flip the prediction
-            well before the image looks any different to a human eye. This is a
-            simplified illustration of the fragility that motivates adversarial
-            robustness research in ML security.
+            A small feedforward network — input, two hidden layers, and an
+            output layer classifying traffic as normal, suspicious, or
+            malicious. Each cycle, a random input vector is pushed through:
+            watch the signal pulses travel edge by edge, node glow track
+            activation strength, and edge thickness/color track weight magnitude
+            (teal/green = positive, red = negative). A simplified picture of the
+            kind of network behind intrusion detection models.
           </p>
-          <div id="adversarial-canvas-wrap"></div>
+          <div id="neural-canvas-wrap"></div>
           <div class="viz-controls">
-            <button id="adv-reset">reset image</button>
-            <button id="adv-toggle">start perturbing</button>
-            <span class="stat-chip">step: <span id="adv-step">0</span></span>
+            <button id="nn-reset">reshuffle weights</button>
+            <button id="nn-toggle">pause</button>
+            <span class="stat-chip">passes: <span id="nn-passes">0</span></span>
             <span class="stat-chip"
-              >true class conf: <span id="adv-true-conf">–</span></span
+              >prediction: <span id="nn-pred">–</span></span
             >
             <span class="stat-chip"
-              >predicted: <span id="adv-pred">–</span></span
+              >confidence: <span id="nn-conf">–</span></span
             >
           </div>
         </div>
@@ -184,7 +183,7 @@
     </footer>
 
     <script src="firewall.js"></script>
-    <script src="adversarial.js"></script>
+    <script src="neural.js"></script>
     <script>
       HDTheme.init();
     </script>

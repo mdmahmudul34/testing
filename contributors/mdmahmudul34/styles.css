@@ -78,7 +78,7 @@ section.block h2::before {
   margin: 0 0 1rem;
 }
 #firewall-canvas-wrap,
-#adversarial-canvas-wrap {
+#neural-canvas-wrap {
   display: flex;
   justify-content: center;
   border-radius: var(--radius-md);
@@ -87,7 +87,7 @@ section.block h2::before {
   background: #000;
 }
 #firewall-canvas-wrap canvas,
-#adversarial-canvas-wrap canvas {
+#neural-canvas-wrap canvas {
   max-width: 100%;
   height: auto;
   display: block;
