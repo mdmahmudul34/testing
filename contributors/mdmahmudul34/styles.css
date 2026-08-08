@@ -85,12 +85,20 @@ section.block h2::before {
   overflow: hidden;
   border: 1px solid var(--border);
   background: #000;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 #firewall-canvas-wrap canvas,
 #neural-canvas-wrap canvas {
+  width: 100%;
   max-width: 100%;
   height: auto;
   display: block;
+}
+.viz-panel {
+  min-width: 0;
+  overflow-x: hidden;
 }
 .viz-controls {
   display: flex;

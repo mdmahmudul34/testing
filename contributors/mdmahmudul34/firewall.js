@@ -164,8 +164,8 @@
   function resize() {
     const holder = document.getElementById("firewall-canvas-wrap");
     if (!holder || !canvas) return;
-    const containerW = holder.clientWidth || 640;
-    W = Math.max(280, Math.min(640, containerW));
+    const containerW = holder.getBoundingClientRect().width || 640;
+    W = Math.max(280, Math.min(640, Math.floor(containerW)));
     WALL_X = W - 80;
     canvas.width = W;
     canvas.height = H;
@@ -177,7 +177,7 @@
     canvas = document.createElement("canvas");
     holder.appendChild(canvas);
     ctx = canvas.getContext("2d");
-    resize();
+    requestAnimationFrame(resize);
     window.addEventListener("resize", resize);
 
     const resetBtn = document.getElementById("firewall-reset");

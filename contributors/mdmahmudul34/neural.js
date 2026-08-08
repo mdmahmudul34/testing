@@ -273,8 +273,8 @@
   function resize() {
     const holder = document.getElementById("neural-canvas-wrap");
     if (!holder || !canvas) return;
-    const containerW = holder.clientWidth || 640;
-    W = Math.max(280, Math.min(640, containerW));
+    const containerW = holder.getBoundingClientRect().width || 640;
+    W = Math.max(280, Math.min(640, Math.floor(containerW)));
     computeLayerX();
     canvas.width = W;
     canvas.height = H;
@@ -290,15 +290,14 @@
     holder.appendChild(canvas);
     ctx = canvas.getContext("2d");
 
-    computeLayerX();
-    const containerW = holder.clientWidth || 640;
-    W = Math.max(280, Math.min(640, containerW));
+    // Paint something immediately at a safe default, then correct the
+    // size once layout has settled (avoids measuring width=0 too early).
     canvas.width = W;
     canvas.height = H;
     computeLayerX();
-
     buildNetwork();
     startCycle();
+    requestAnimationFrame(resize);
     window.addEventListener("resize", resize);
 
     const resetBtn = document.getElementById("nn-reset");
