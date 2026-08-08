@@ -1,12 +1,22 @@
 {
   "name": "Md. Mahmudul Kabir Himel",
-  "role": "CS Student, AI/ML & Cybersecurity",
+  "role": "CS Student · ML & Cybersecurity Researcher",
   "university": "BRAC University",
   "github": "mdmahmudul34",
-  "bio": "Computer Science student interested in Artificial Intelligence, Machine Learning, Cybersecurity, and Open Source development. I enjoy building research-driven solutions, participating in hackathons, and exploring emerging technologies.",
-  "tags": ["Python", "AI/ML", "Cybersecurity", "Open Source", "Docker", "Linux"],
+  "bio": "Computer Science student currently finishing a thesis on machine learning-based intrusion detection for industrial control systems. Interested in AI/ML, cybersecurity, and open source development.",
+  "tags": [
+    "Python",
+    "Machine Learning",
+    "Cybersecurity",
+    "ICS Security",
+    "Docker",
+    "Open Source"
+  ],
   "links": {
     "github": "https://github.com/mdmahmudul34",
-    "linkedin": "https://linkedin.com/in/mdmahmud34"
+    "linkedin": "https://linkedin.com/in/mdmahmud34",
+    "researchgate": "https://www.researchgate.net/profile/Md-Mahmudul-Kabir-Himel",
+    "webofscience": "https://www.webofscience.com/wos/author/record/QUT-3210-2026",
+    "website": "https://mdmahmudul34.github.io/personal_homepage/"
   }
 }
