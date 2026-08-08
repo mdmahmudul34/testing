@@ -1,33 +1,21 @@
-// Feedforward neural network forward-pass visualizer.
-// A small network (input -> hidden -> output) repeatedly runs a forward
-// pass on a randomized input vector. Signal pulses travel along edges,
-// edge thickness/opacity reflects weight magnitude, node fill reflects
-// activation, and the output layer lights up the winning class.
+// Simulated firewall packet stream — packets flow left to right toward a
+// firewall line; each is scored against simple "traffic shape" rules and
+// flagged normal / malicious in real time.
 
 (function () {
   let W = 640;
-  const H = 380;
-
-  const LAYER_SIZES = [4, 6, 5, 3];
-  let LAYER_X = [80, 260, 440, 580];
-  const CLASS_LABELS = ["normal", "suspicious", "malicious"];
-
-  function computeLayerX() {
-    const margin = 50;
-    const usable = W - margin * 2;
-    LAYER_X = LAYER_SIZES.map(
-      (_, l) => margin + (usable * l) / (LAYER_SIZES.length - 1),
-    );
-  }
+  const H = 360;
+  let WALL_X = W - 80;
 
   let canvas, ctx;
-  let layers = []; // layers[l] = array of {x, y, activation}
-  let weights = []; // weights[l] = matrix [from][to] connecting layer l -> l+1
-  let pulses = []; // traveling signal dots {l, from, to, t}
+  let packets = [];
+  let total = 0;
+  let blocked = 0;
+  let speedMultiplier = 1;
+  const speedLevels = [1, 3, 6];
+  let speedIdx = 0;
   let running = true;
-  let cycle = 0;
-  let cycleTimer = 0;
-  const CYCLE_LEN = 90;
+  let spawnTimer = 0;
 
   function isLight() {
     return document.documentElement.getAttribute("data-theme") === "light";
@@ -37,147 +25,74 @@
     return Math.random() * (max - min) + min;
   }
 
-  function sigmoid(x) {
-    return 1 / (1 + Math.exp(-x));
+  function makePacket() {
+    // Each packet has a few "traffic shape" features. Malicious packets are
+    // drawn from a distribution with unusual size / port / burst timing.
+    const isMalicious = Math.random() < 0.28;
+    const size = isMalicious ? rand(0.75, 1) : rand(0, 0.55);
+    const portOddity = isMalicious ? rand(0.6, 1) : rand(0, 0.4);
+    const burst = isMalicious ? rand(0.5, 1) : rand(0, 0.5);
+
+    // Score = simple weighted rule combination (toy IDS logic).
+    const score = 0.4 * size + 0.35 * portOddity + 0.25 * burst;
+    const flagged = score > 0.5;
+
+    return {
+      x: -20,
+      y: rand(40, H - 40),
+      vy: rand(-0.15, 0.15),
+      r: 5 + size * 4,
+      isMalicious,
+      flagged,
+      score,
+      resolved: false,
+      fade: 1,
+    };
   }
 
-  function buildNetwork() {
-    layers = LAYER_SIZES.map((size, l) => {
-      const x = LAYER_X[l];
-      const arr = [];
-      for (let i = 0; i < size; i++) {
-        const y = H / 2 + (i - (size - 1) / 2) * (H / (size + 1.6));
-        arr.push({ x, y, activation: 0 });
-      }
-      return arr;
-    });
-
-    weights = [];
-    for (let l = 0; l < LAYER_SIZES.length - 1; l++) {
-      const fromN = LAYER_SIZES[l];
-      const toN = LAYER_SIZES[l + 1];
-      const mat = [];
-      for (let i = 0; i < fromN; i++) {
-        const row = [];
-        for (let j = 0; j < toN; j++) row.push(rand(-1, 1));
-        mat.push(row);
-      }
-      weights.push(mat);
-    }
-  }
-
-  function randomizeInput() {
-    for (let i = 0; i < layers[0].length; i++) {
-      layers[0][i].activation = rand(0, 1);
-    }
-  }
-
-  function forwardPass() {
-    for (let l = 0; l < weights.length; l++) {
-      const fromLayer = layers[l];
-      const toLayer = layers[l + 1];
-      for (let j = 0; j < toLayer.length; j++) {
-        let sum = 0;
-        for (let i = 0; i < fromLayer.length; i++) {
-          sum += fromLayer[i].activation * weights[l][i][j];
-        }
-        toLayer[j].activation = sigmoid(sum);
-      }
-    }
-  }
-
-  function spawnPulsesForLayer(l) {
-    const fromLayer = layers[l];
-    const toLayer = layers[l + 1];
-    for (let i = 0; i < fromLayer.length; i++) {
-      for (let j = 0; j < toLayer.length; j++) {
-        if (Math.random() < 0.55) {
-          pulses.push({ l, i, j, t: 0 });
-        }
-      }
-    }
-  }
-
-  function startCycle() {
-    randomizeInput();
-    pulses = [];
-    cycleTimer = 0;
-    cycle++;
-    // Reset downstream activations visually until the pulse arrives.
-    for (let l = 1; l < layers.length; l++) {
-      for (const n of layers[l]) n.activation = 0;
-    }
-    spawnPulsesForLayer(0);
+  function resetStream() {
+    packets = [];
+    total = 0;
+    blocked = 0;
     updateStats();
   }
 
   function updateStats() {
-    const stepEl = document.getElementById("nn-passes");
-    if (stepEl) stepEl.textContent = cycle.toLocaleString();
-
-    const outLayer = layers[layers.length - 1];
-    let maxIdx = 0;
-    for (let i = 1; i < outLayer.length; i++) {
-      if (outLayer[i].activation > outLayer[maxIdx].activation) maxIdx = i;
-    }
-    const predEl = document.getElementById("nn-pred");
-    const confEl = document.getElementById("nn-conf");
-    if (predEl) predEl.textContent = CLASS_LABELS[maxIdx] || "–";
-    if (confEl) {
-      const total = outLayer.reduce((s, n) => s + n.activation, 0) || 1;
-      confEl.textContent = `${((outLayer[maxIdx].activation / total) * 100).toFixed(1)}%`;
-    }
+    const totalEl = document.getElementById("firewall-total");
+    const blockedEl = document.getElementById("firewall-blocked");
+    const rateEl = document.getElementById("firewall-rate");
+    if (totalEl) totalEl.textContent = total.toLocaleString();
+    if (blockedEl) blockedEl.textContent = blocked.toLocaleString();
+    if (rateEl)
+      rateEl.textContent =
+        total > 0 ? `${((blocked / total) * 100).toFixed(1)}%` : "–";
   }
 
   function step() {
-    cycleTimer++;
+    spawnTimer++;
+    if (spawnTimer > 14) {
+      spawnTimer = 0;
+      packets.push(makePacket());
+    }
 
-    // Advance pulses.
-    const PULSE_SPEED = 0.045;
-    for (const p of pulses) p.t += PULSE_SPEED;
+    for (const pkt of packets) {
+      if (pkt.resolved) {
+        pkt.fade -= 0.04;
+        continue;
+      }
+      pkt.x += 2.2;
+      pkt.y += pkt.vy;
+      pkt.y = Math.max(30, Math.min(H - 30, pkt.y));
 
-    // When pulses for a layer transition complete, compute that layer's
-    // activations and spawn the next wave.
-    const layerDoneThreshold = 1.0;
-    for (let l = 0; l < weights.length; l++) {
-      const layerPulses = pulses.filter((p) => p.l === l);
-      if (layerPulses.length === 0) continue;
-      const allDone = layerPulses.every((p) => p.t >= layerDoneThreshold);
-      if (allDone && !layers[l + 1]._computed) {
-        // compute this layer's activations from previous layer
-        const fromLayer = layers[l];
-        const toLayer = layers[l + 1];
-        for (let j = 0; j < toLayer.length; j++) {
-          let sum = 0;
-          for (let i = 0; i < fromLayer.length; i++) {
-            sum += fromLayer[i].activation * weights[l][i][j];
-          }
-          toLayer[j].activation = sigmoid(sum);
-        }
-        layers[l + 1]._computed = true;
-        if (l + 1 < weights.length) spawnPulsesForLayer(l + 1);
+      if (pkt.x >= WALL_X) {
+        pkt.resolved = true;
+        total++;
+        if (pkt.flagged) blocked++;
         updateStats();
       }
     }
 
-    pulses = pulses.filter((p) => p.t < 1.15);
-
-    if (cycleTimer > CYCLE_LEN && pulses.length === 0) {
-      for (const l of layers) l._computed = false;
-      startCycle();
-    }
-  }
-
-  function weightColor(w, light) {
-    const alpha = Math.min(1, Math.abs(w));
-    if (w >= 0) {
-      return light
-        ? `rgba(47,168,143,${0.15 + alpha * 0.5})`
-        : `rgba(51,217,193,${0.15 + alpha * 0.5})`;
-    }
-    return light
-      ? `rgba(217,79,79,${0.15 + alpha * 0.5})`
-      : `rgba(255,92,92,${0.15 + alpha * 0.5})`;
+    packets = packets.filter((pkt) => pkt.fade > 0);
   }
 
   function draw() {
@@ -185,137 +100,106 @@
     ctx.fillStyle = light ? "#fffaf3" : "#080808";
     ctx.fillRect(0, 0, W, H);
 
-    // Edges
-    for (let l = 0; l < weights.length; l++) {
-      const fromLayer = layers[l];
-      const toLayer = layers[l + 1];
-      for (let i = 0; i < fromLayer.length; i++) {
-        for (let j = 0; j < toLayer.length; j++) {
-          const w = weights[l][i][j];
-          ctx.strokeStyle = weightColor(w, light);
-          ctx.lineWidth = 0.5 + Math.abs(w) * 2.2;
-          ctx.beginPath();
-          ctx.moveTo(fromLayer[i].x, fromLayer[i].y);
-          ctx.lineTo(toLayer[j].x, toLayer[j].y);
-          ctx.stroke();
-        }
+    // Firewall line
+    ctx.strokeStyle = light ? "#d94f4f" : "#ff5c5c";
+    ctx.lineWidth = 3;
+    ctx.setLineDash([8, 6]);
+    ctx.beginPath();
+    ctx.moveTo(WALL_X, 10);
+    ctx.lineTo(WALL_X, H - 28); // stop short of the bottom so the label has clear space
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.font = "11px monospace";
+    ctx.fillStyle = light ? "#8a5a5a" : "#ff9f9f";
+    const label = "firewall";
+    const labelWidth = ctx.measureText(label).width;
+    // Keep the label to the left of the line with a clear gap, but never
+    // let it run off the left edge of the canvas either.
+    const labelX = Math.max(
+      4,
+      Math.min(WALL_X - labelWidth - 10, W - labelWidth - 4),
+    );
+    ctx.fillText(label, labelX, H - 14);
+
+    for (const pkt of packets) {
+      let color;
+      if (!pkt.resolved) {
+        color = pkt.isMalicious
+          ? light
+            ? "#e05c2f"
+            : "#ff9f43"
+          : light
+            ? "#3fa9e0"
+            : "#4d8bff";
+      } else {
+        color = pkt.flagged
+          ? light
+            ? "#d94f4f"
+            : "#ff5c5c"
+          : light
+            ? "#2fa88f"
+            : "#33d9c1";
       }
-    }
-
-    // Pulses
-    for (const p of pulses) {
-      const fromLayer = layers[p.l];
-      const toLayer = layers[p.l + 1];
-      const a = fromLayer[p.i];
-      const b = toLayer[p.j];
-      const t = Math.min(1, p.t);
-      const x = a.x + (b.x - a.x) * t;
-      const y = a.y + (b.y - a.y) * t;
-      ctx.fillStyle = light ? "#e0538c" : "#3ef2a1";
+      ctx.globalAlpha = pkt.resolved ? Math.max(0, pkt.fade) : 1;
+      ctx.fillStyle = color;
       ctx.beginPath();
-      ctx.arc(x, y, 3, 0, Math.PI * 2);
+      ctx.arc(pkt.x, pkt.y, pkt.r, 0, Math.PI * 2);
       ctx.fill();
-    }
 
-    // Nodes
-    for (let l = 0; l < layers.length; l++) {
-      for (const n of layers[l]) {
-        const r = 12 + n.activation * 6;
-        const glow = light
-          ? `rgba(224,83,140,${0.15 + n.activation * 0.5})`
-          : `rgba(62,242,161,${0.15 + n.activation * 0.5})`;
-        ctx.fillStyle = glow;
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, r + 6, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = light ? "#3a3a3a" : "#e8e8e8";
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, r * 0.55, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.strokeStyle = light ? "#c88" : "#4d8bff";
+      if (pkt.resolved && pkt.flagged) {
+        ctx.strokeStyle = color;
         ctx.lineWidth = 1.5;
         ctx.beginPath();
-        ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+        ctx.moveTo(pkt.x - 6, pkt.y - 6);
+        ctx.lineTo(pkt.x + 6, pkt.y + 6);
+        ctx.moveTo(pkt.x + 6, pkt.y - 6);
+        ctx.lineTo(pkt.x - 6, pkt.y + 6);
         ctx.stroke();
       }
+      ctx.globalAlpha = 1;
     }
-
-    // Output labels
-    const outLayer = layers[layers.length - 1];
-    ctx.font = "11px monospace";
-    ctx.fillStyle = light ? "#6b6b6b" : "#aaaaaa";
-    for (let i = 0; i < outLayer.length; i++) {
-      ctx.fillText(
-        CLASS_LABELS[i] || "",
-        outLayer[i].x + 16,
-        outLayer[i].y + 4,
-      );
-    }
-
-    // Layer captions
-    ctx.fillStyle = light ? "#8a8a8a" : "#888888";
-    ctx.fillText("input", LAYER_X[0] - 14, H - 12);
-    ctx.fillText("hidden", LAYER_X[1] - 18, H - 12);
-    ctx.fillText("hidden", LAYER_X[2] - 18, H - 12);
-    ctx.fillText("output", LAYER_X[3] - 18, H - 12);
   }
 
   function loop() {
     if (running) {
-      step();
+      for (let i = 0; i < speedMultiplier; i++) step();
       draw();
     }
     requestAnimationFrame(loop);
   }
 
   function resize() {
-    const holder = document.getElementById("neural-canvas-wrap");
+    const holder = document.getElementById("firewall-canvas-wrap");
     if (!holder || !canvas) return;
     const containerW = holder.getBoundingClientRect().width || 640;
     W = Math.max(280, Math.min(640, Math.floor(containerW)));
-    computeLayerX();
+    WALL_X = W - 80;
     canvas.width = W;
     canvas.height = H;
-    buildNetwork();
-    cycle = 0;
-    startCycle();
   }
 
   function init() {
-    const holder = document.getElementById("neural-canvas-wrap");
+    const holder = document.getElementById("firewall-canvas-wrap");
     if (!holder) return;
     canvas = document.createElement("canvas");
     holder.appendChild(canvas);
     ctx = canvas.getContext("2d");
-
-    // Paint something immediately at a safe default, then correct the
-    // size once layout has settled (avoids measuring width=0 too early).
-    canvas.width = W;
-    canvas.height = H;
-    computeLayerX();
-    buildNetwork();
-    startCycle();
     requestAnimationFrame(resize);
     window.addEventListener("resize", resize);
 
-    const resetBtn = document.getElementById("nn-reset");
-    const toggleBtn = document.getElementById("nn-toggle");
-    if (resetBtn) {
-      resetBtn.addEventListener("click", () => {
-        buildNetwork();
-        cycle = 0;
-        startCycle();
-      });
-    }
-    if (toggleBtn) {
-      toggleBtn.addEventListener("click", () => {
-        running = !running;
-        toggleBtn.textContent = running ? "pause" : "resume";
+    const resetBtn = document.getElementById("firewall-reset");
+    const speedBtn = document.getElementById("firewall-speed");
+    if (resetBtn) resetBtn.addEventListener("click", resetStream);
+    if (speedBtn) {
+      speedBtn.addEventListener("click", () => {
+        speedIdx = (speedIdx + 1) % speedLevels.length;
+        speedMultiplier = speedLevels[speedIdx];
+        speedBtn.textContent = `speed: ${speedMultiplier}×`;
       });
     }
 
+    resetStream();
     loop();
   }
 

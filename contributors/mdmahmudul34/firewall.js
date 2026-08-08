@@ -106,13 +106,21 @@
     ctx.setLineDash([8, 6]);
     ctx.beginPath();
     ctx.moveTo(WALL_X, 10);
-    ctx.lineTo(WALL_X, H - 10);
+    ctx.lineTo(WALL_X, H - 28); // stop short of the bottom so the label has clear space
     ctx.stroke();
     ctx.setLineDash([]);
 
     ctx.font = "11px monospace";
     ctx.fillStyle = light ? "#8a5a5a" : "#ff9f9f";
-    ctx.fillText("firewall", WALL_X - 30, H - 14);
+    const label = "firewall";
+    const labelWidth = ctx.measureText(label).width;
+    // Keep the label to the left of the line with a clear gap, but never
+    // let it run off the left edge of the canvas either.
+    const labelX = Math.max(
+      4,
+      Math.min(WALL_X - labelWidth - 10, W - labelWidth - 4),
+    );
+    ctx.fillText(label, labelX, H - 14);
 
     for (const pkt of packets) {
       let color;
